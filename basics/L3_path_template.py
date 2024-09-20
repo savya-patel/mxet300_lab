@@ -5,6 +5,7 @@
 import L1_log as log
 import L2_inverse_kinematics as ik
 import L2_speed_control as sc
+import L1_ina as ina
 import numpy as np
 from time import sleep
 
@@ -35,4 +36,14 @@ for  count, motion in enumerate(motions):
     print("Motion: ", count+1, "\t Chassis Forward Velocity (m/s): {:.2f} \t Chassis Angular Velocity (rad/s): {:.2f} \t Duration (sec): {:.2f}".format(motion[0], motion[1], motion[2]))
     wheel_speeds = ik.getPdTargets(motion[:2])                  # take the forward speed(m/s) and turning speed(rad/s) and use inverse kinematics to deterimine wheel speeds
     sc.driveOpenLoop(wheel_speeds)                              # take the calculated wheel speeds and use them to run the motors
+    x = motions[count][0]
+    theta = motions[count][1]
+    log.tmpFile(x, "x_dot.txt")
+    log.tmpFile(theta, "theta_dot.txt")
+
+    voltage = ina.readVolts()
+    log.tmpFile(voltage, "tmp.txt")
     sleep(motion[2])                                            # wait the motion duration
+
+import L1_log as log
+from time import sleep
