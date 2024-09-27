@@ -1,0 +1,180 @@
+[
+    {
+        "id": "c88c2c78.0d37e",
+        "type": "tab",
+        "label": "Lab 4 - Motor Drivers & Inverse Kinematics",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "2da17863.efa028",
+        "type": "inject",
+        "z": "c88c2c78.0d37e",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "0.2",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 402.1999816894531,
+        "y": 225.1999969482422,
+        "wires": [
+            [
+                "343b3279.a970ae",
+                "cf08698d.4bae78"
+            ]
+        ]
+    },
+    {
+        "id": "343b3279.a970ae",
+        "type": "file in",
+        "z": "c88c2c78.0d37e",
+        "name": "",
+        "filename": "/tmp/fwd.txt",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "x": 642.1999816894531,
+        "y": 245.1999969482422,
+        "wires": [
+            [
+                "3319446.c0882bc"
+            ]
+        ]
+    },
+    {
+        "id": "cf08698d.4bae78",
+        "type": "file in",
+        "z": "c88c2c78.0d37e",
+        "name": "",
+        "filename": "/tmp/ang.txt",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "x": 632.1999816894531,
+        "y": 305.1999969482422,
+        "wires": [
+            [
+                "f7561695.6db5b8"
+            ]
+        ]
+    },
+    {
+        "id": "3319446.c0882bc",
+        "type": "ui_chart",
+        "z": "c88c2c78.0d37e",
+        "name": "Forward Velocity (m/s)",
+        "group": "68482647.1b58f8",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "label": "Forward Velocity (m/s)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "-0.5",
+        "ymax": "0.5",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "x": 920,
+        "y": 240,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f7561695.6db5b8",
+        "type": "ui_chart",
+        "z": "c88c2c78.0d37e",
+        "name": "Angular Velocity (rad/s)",
+        "group": "68482647.1b58f8",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "label": "Angular Velocity (rad/s)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "-3.5",
+        "ymax": "3.5",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "x": 910,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "68482647.1b58f8",
+        "type": "ui_group",
+        "name": "Chassis Speeds",
+        "tab": "a0f86ee.ffde29",
+        "order": 2,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "a0f86ee.ffde29",
+        "type": "ui_tab",
+        "name": "Lab 5 - Encoders and Forward Kinematics",
+        "icon": "dashboard",
+        "order": 3,
+        "disabled": false,
+        "hidden": false
+    }
+]
