@@ -45,3 +45,8 @@ for  count, motion in enumerate(motions):
     log.tmpFile(voltage, "tmp.txt")
     sleep(motion[2])                                            # wait the motion duration
 
+<<<<<<< HEAD
+=======
+import L1_log as log
+from time import sleep
+>>>>>>> 9580bf626c4825922614a027c9d89ebeb7e4f4f2

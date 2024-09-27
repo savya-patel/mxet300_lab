@@ -1,0 +1,180 @@
+[
+    {
+        "id": "eb27e8df.322de8",
+        "type": "tab",
+        "label": "Lab 5- Encoders & Forward Kinematics",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "6b3765f6.c069ec",
+        "type": "inject",
+        "z": "eb27e8df.322de8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "0.2",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 130,
+        "y": 240,
+        "wires": [
+            [
+                "686f43e.dcc51bc",
+                "a1fb4b98.f3ddc8"
+            ]
+        ]
+    },
+    {
+        "id": "686f43e.dcc51bc",
+        "type": "file in",
+        "z": "eb27e8df.322de8",
+        "name": "",
+        "filename": "/tmp/pdl.txt",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "x": 370,
+        "y": 260,
+        "wires": [
+            [
+                "3805c33f.b8584c"
+            ]
+        ]
+    },
+    {
+        "id": "a1fb4b98.f3ddc8",
+        "type": "file in",
+        "z": "eb27e8df.322de8",
+        "name": "",
+        "filename": "/tmp/pdr.txt",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "x": 360,
+        "y": 320,
+        "wires": [
+            [
+                "a2d9aa76.ac0298"
+            ]
+        ]
+    },
+    {
+        "id": "3805c33f.b8584c",
+        "type": "ui_chart",
+        "z": "eb27e8df.322de8",
+        "name": "Left Wheel (rad/s)",
+        "group": "ed1c3932.b44438",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "label": "Left Wheel (rad/s)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "-10",
+        "ymax": "10",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "x": 637.8000183105469,
+        "y": 254.8000030517578,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a2d9aa76.ac0298",
+        "type": "ui_chart",
+        "z": "eb27e8df.322de8",
+        "name": "Right Wheel (rad/s)",
+        "group": "ed1c3932.b44438",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "label": "Right Wheel (rad/s)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "-10",
+        "ymax": "10",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "x": 617.8000183105469,
+        "y": 314.8000030517578,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ed1c3932.b44438",
+        "type": "ui_group",
+        "name": "Wheel Speeds",
+        "tab": "a0f86ee.ffde29",
+        "order": 3,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "a0f86ee.ffde29",
+        "type": "ui_tab",
+        "name": "Lab 5 - Encoders and Forward Kinematics",
+        "icon": "dashboard",
+        "order": 3,
+        "disabled": false,
+        "hidden": false
+    }
+]
