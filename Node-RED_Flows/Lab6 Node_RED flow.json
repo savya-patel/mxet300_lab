@@ -1,0 +1,297 @@
+[
+    {
+        "id": "dc531fb3.c38b4",
+        "type": "tab",
+        "label": "Lab 6- LIDAR and Obstacle detection",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "9f0ab484.e8aae8",
+        "type": "inject",
+        "z": "dc531fb3.c38b4",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "0.2",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 190,
+        "y": 220,
+        "wires": [
+            [
+                "ca06c5d7.12d478",
+                "73a3ea39.263ab4",
+                "e3379c0b.719bc",
+                "ec917a4d.d9f9c8"
+            ]
+        ]
+    },
+    {
+        "id": "a5e9f77d.1e1918",
+        "type": "ui_gauge",
+        "z": "dc531fb3.c38b4",
+        "name": "Angle of LIDAR (deg)",
+        "group": "d727ec28.6090a",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "gtype": "compass",
+        "title": "Angle of LIDAR (deg)",
+        "label": "degrees",
+        "format": "{{value}}",
+        "min": "-135",
+        "max": "135",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 670,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "ca06c5d7.12d478",
+        "type": "file in",
+        "z": "dc531fb3.c38b4",
+        "name": "",
+        "filename": "/tmp/angle.txt",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "x": 410,
+        "y": 240,
+        "wires": [
+            [
+                "a5e9f77d.1e1918"
+            ]
+        ]
+    },
+    {
+        "id": "73a3ea39.263ab4",
+        "type": "file in",
+        "z": "dc531fb3.c38b4",
+        "name": "",
+        "filename": "/tmp/distance.txt",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "x": 410,
+        "y": 300,
+        "wires": [
+            [
+                "96bdb80d.5a26b8"
+            ]
+        ]
+    },
+    {
+        "id": "96bdb80d.5a26b8",
+        "type": "ui_chart",
+        "z": "dc531fb3.c38b4",
+        "name": "DIstance of LIDAR (m)",
+        "group": "d727ec28.6090a",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "label": "DIstance of LIDAR (m)",
+        "chartType": "bar",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "2",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "x": 660,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e3379c0b.719bc",
+        "type": "file in",
+        "z": "dc531fb3.c38b4",
+        "name": "",
+        "filename": "/tmp/x_value.txt",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "x": 400,
+        "y": 360,
+        "wires": [
+            [
+                "31326440.4e713c"
+            ]
+        ]
+    },
+    {
+        "id": "ec917a4d.d9f9c8",
+        "type": "file in",
+        "z": "dc531fb3.c38b4",
+        "name": "",
+        "filename": "/tmp/y_value.txt",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "x": 400,
+        "y": 420,
+        "wires": [
+            [
+                "ad664945.d3eb88"
+            ]
+        ]
+    },
+    {
+        "id": "ad664945.d3eb88",
+        "type": "ui_chart",
+        "z": "dc531fb3.c38b4",
+        "name": "Y coordinates",
+        "group": "7fd401e3.125cf",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "label": "Y coordinates",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "-2",
+        "ymax": "2",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "x": 630,
+        "y": 420,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "31326440.4e713c",
+        "type": "ui_chart",
+        "z": "dc531fb3.c38b4",
+        "name": "X coordinates",
+        "group": "7fd401e3.125cf",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "label": "X coordinates",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "-2",
+        "ymax": "2",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "x": 640,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d727ec28.6090a",
+        "type": "ui_group",
+        "name": "LIDAR Angle and distance",
+        "tab": "b8b90e36.a4e81",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "7fd401e3.125cf",
+        "type": "ui_group",
+        "name": "X, Y coordinates",
+        "tab": "b8b90e36.a4e81",
+        "order": 2,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "b8b90e36.a4e81",
+        "type": "ui_tab",
+        "name": "Lab 6- LIDAR and obstacle detection",
+        "icon": "dashboard",
+        "order": 5,
+        "disabled": false,
+        "hidden": false
+    }
+]
