@@ -1,0 +1,625 @@
+[
+    {
+        "id": "32980006.220a9",
+        "type": "tab",
+        "label": "Color Tracking Calibration",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "44770ebe.3adbe",
+        "type": "ui_slider",
+        "z": "32980006.220a9",
+        "name": "",
+        "label": "H Min",
+        "tooltip": "",
+        "group": "cdfc2e26.64916",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "outs": "end",
+        "topic": "h_min",
+        "min": 0,
+        "max": "255",
+        "step": "5",
+        "x": 310,
+        "y": 120,
+        "wires": [
+            [
+                "784d9bca.3a1ff4",
+                "24318164.00ebee"
+            ]
+        ]
+    },
+    {
+        "id": "57ac5031.1bfd",
+        "type": "ui_slider",
+        "z": "32980006.220a9",
+        "name": "",
+        "label": "S Min",
+        "tooltip": "",
+        "group": "cdfc2e26.64916",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "outs": "end",
+        "topic": "s_min",
+        "min": 0,
+        "max": "255",
+        "step": "5",
+        "x": 310,
+        "y": 280,
+        "wires": [
+            [
+                "36f2e614.75bbba",
+                "7ae78629.7c5898"
+            ]
+        ]
+    },
+    {
+        "id": "eb91bdf0.aa434",
+        "type": "ui_slider",
+        "z": "32980006.220a9",
+        "name": "",
+        "label": "V Min",
+        "tooltip": "",
+        "group": "cdfc2e26.64916",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "outs": "end",
+        "topic": "v_min",
+        "min": 0,
+        "max": "255",
+        "step": "5",
+        "x": 310,
+        "y": 440,
+        "wires": [
+            [
+                "a549c5d8.47f4e8",
+                "ba29f9ca.4579e8"
+            ]
+        ]
+    },
+    {
+        "id": "1d75c343.736b7d",
+        "type": "ui_slider",
+        "z": "32980006.220a9",
+        "name": "",
+        "label": "H Max",
+        "tooltip": "",
+        "group": "cdfc2e26.64916",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "outs": "end",
+        "topic": "",
+        "min": 0,
+        "max": "255",
+        "step": "5",
+        "x": 310,
+        "y": 600,
+        "wires": [
+            [
+                "c77316a9.c98618",
+                "691f3b54.392ab4"
+            ]
+        ]
+    },
+    {
+        "id": "dbfdd65a.57a958",
+        "type": "ui_slider",
+        "z": "32980006.220a9",
+        "name": "",
+        "label": "S Max",
+        "tooltip": "",
+        "group": "cdfc2e26.64916",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "outs": "end",
+        "topic": "",
+        "min": 0,
+        "max": "255",
+        "step": "5",
+        "x": 310,
+        "y": 760,
+        "wires": [
+            [
+                "98a4b7f5.a40688",
+                "409ffaf.7a9f604"
+            ]
+        ]
+    },
+    {
+        "id": "47693504.7b1d9c",
+        "type": "ui_slider",
+        "z": "32980006.220a9",
+        "name": "",
+        "label": "V Max",
+        "tooltip": "",
+        "group": "cdfc2e26.64916",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "outs": "end",
+        "topic": "",
+        "min": 0,
+        "max": "255",
+        "step": "5",
+        "x": 310,
+        "y": 920,
+        "wires": [
+            [
+                "df0ed501.d3a848",
+                "7fd96026.1f4b4"
+            ]
+        ]
+    },
+    {
+        "id": "784d9bca.3a1ff4",
+        "type": "ui_text",
+        "z": "32980006.220a9",
+        "group": "826beb48.533878",
+        "order": 6,
+        "width": 0,
+        "height": 0,
+        "name": "H Min",
+        "label": "",
+        "format": "{{msg.payload}}",
+        "layout": "row-left",
+        "x": 490,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "36f2e614.75bbba",
+        "type": "ui_text",
+        "z": "32980006.220a9",
+        "group": "826beb48.533878",
+        "order": 6,
+        "width": 0,
+        "height": 0,
+        "name": "S Min",
+        "label": "",
+        "format": "{{msg.payload}}",
+        "layout": "row-left",
+        "x": 490,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "a549c5d8.47f4e8",
+        "type": "ui_text",
+        "z": "32980006.220a9",
+        "group": "826beb48.533878",
+        "order": 6,
+        "width": 0,
+        "height": 0,
+        "name": "V Min",
+        "label": "",
+        "format": "{{msg.payload}}",
+        "layout": "row-left",
+        "x": 490,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "c77316a9.c98618",
+        "type": "ui_text",
+        "z": "32980006.220a9",
+        "group": "826beb48.533878",
+        "order": 6,
+        "width": 0,
+        "height": 0,
+        "name": "H Max",
+        "label": "",
+        "format": "{{msg.payload}}",
+        "layout": "row-left",
+        "x": 490,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "98a4b7f5.a40688",
+        "type": "ui_text",
+        "z": "32980006.220a9",
+        "group": "826beb48.533878",
+        "order": 6,
+        "width": 0,
+        "height": 0,
+        "name": "S Max",
+        "label": "",
+        "format": "{{msg.payload}}",
+        "layout": "row-left",
+        "x": 490,
+        "y": 820,
+        "wires": []
+    },
+    {
+        "id": "df0ed501.d3a848",
+        "type": "ui_text",
+        "z": "32980006.220a9",
+        "group": "826beb48.533878",
+        "order": 6,
+        "width": 0,
+        "height": 0,
+        "name": "V Max",
+        "label": "",
+        "format": "{{msg.payload}}",
+        "layout": "row-left",
+        "x": 490,
+        "y": 980,
+        "wires": []
+    },
+    {
+        "id": "4aad901a.c4f48",
+        "type": "ui_template",
+        "z": "32980006.220a9",
+        "group": "112a075e.b4c559",
+        "name": "Stream",
+        "order": 6,
+        "width": "6",
+        "height": "12",
+        "format": "<img src=\"http://192.168.1.126:8090/?action=stream\"/>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": false,
+        "templateScope": "local",
+        "x": 120,
+        "y": 40,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "24318164.00ebee",
+        "type": "file",
+        "z": "32980006.220a9",
+        "name": "",
+        "filename": "/tmp/h_min",
+        "appendNewline": false,
+        "createDir": false,
+        "overwriteFile": "true",
+        "x": 510,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "7ae78629.7c5898",
+        "type": "file",
+        "z": "32980006.220a9",
+        "name": "",
+        "filename": "/tmp/s_min",
+        "appendNewline": false,
+        "createDir": false,
+        "overwriteFile": "true",
+        "x": 510,
+        "y": 280,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ba29f9ca.4579e8",
+        "type": "file",
+        "z": "32980006.220a9",
+        "name": "",
+        "filename": "/tmp/v_min",
+        "appendNewline": false,
+        "createDir": false,
+        "overwriteFile": "true",
+        "x": 510,
+        "y": 440,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "691f3b54.392ab4",
+        "type": "file",
+        "z": "32980006.220a9",
+        "name": "",
+        "filename": "/tmp/h_max",
+        "appendNewline": false,
+        "createDir": false,
+        "overwriteFile": "true",
+        "x": 510,
+        "y": 600,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "409ffaf.7a9f604",
+        "type": "file",
+        "z": "32980006.220a9",
+        "name": "",
+        "filename": "/tmp/s_max",
+        "appendNewline": false,
+        "createDir": false,
+        "overwriteFile": "true",
+        "x": 510,
+        "y": 760,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "7fd96026.1f4b4",
+        "type": "file",
+        "z": "32980006.220a9",
+        "name": "",
+        "filename": "/tmp/v_max",
+        "appendNewline": false,
+        "createDir": false,
+        "overwriteFile": "true",
+        "x": 510,
+        "y": 920,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "bcf3978e.897848",
+        "type": "file",
+        "z": "32980006.220a9",
+        "name": "",
+        "filename": "/tmp/h_min",
+        "appendNewline": false,
+        "createDir": false,
+        "overwriteFile": "true",
+        "x": 290,
+        "y": 180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "56d1c72c.9fd0a8",
+        "type": "file",
+        "z": "32980006.220a9",
+        "name": "",
+        "filename": "/tmp/s_min",
+        "appendNewline": false,
+        "createDir": false,
+        "overwriteFile": "true",
+        "x": 290,
+        "y": 340,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ef711ca.9b71be",
+        "type": "file",
+        "z": "32980006.220a9",
+        "name": "",
+        "filename": "/tmp/v_min",
+        "appendNewline": false,
+        "createDir": false,
+        "overwriteFile": "true",
+        "x": 290,
+        "y": 500,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c70e813e.89e91",
+        "type": "file",
+        "z": "32980006.220a9",
+        "name": "",
+        "filename": "/tmp/h_max",
+        "appendNewline": false,
+        "createDir": false,
+        "overwriteFile": "true",
+        "x": 290,
+        "y": 660,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "4d21650a.6400fc",
+        "type": "file",
+        "z": "32980006.220a9",
+        "name": "",
+        "filename": "/tmp/s_max",
+        "appendNewline": false,
+        "createDir": false,
+        "overwriteFile": "true",
+        "x": 290,
+        "y": 820,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "53f5ebb4.609f14",
+        "type": "file",
+        "z": "32980006.220a9",
+        "name": "",
+        "filename": "/tmp/v_max",
+        "appendNewline": false,
+        "createDir": false,
+        "overwriteFile": "true",
+        "x": 290,
+        "y": 980,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "969d630.7145fa",
+        "type": "inject",
+        "z": "32980006.220a9",
+        "name": "",
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "0",
+        "topic": "",
+        "payload": "0",
+        "payloadType": "num",
+        "x": 110,
+        "y": 120,
+        "wires": [
+            [
+                "bcf3978e.897848",
+                "44770ebe.3adbe"
+            ]
+        ]
+    },
+    {
+        "id": "f626c359.7f805",
+        "type": "inject",
+        "z": "32980006.220a9",
+        "name": "",
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "0",
+        "topic": "",
+        "payload": "0",
+        "payloadType": "num",
+        "x": 110,
+        "y": 280,
+        "wires": [
+            [
+                "56d1c72c.9fd0a8",
+                "57ac5031.1bfd"
+            ]
+        ]
+    },
+    {
+        "id": "bad8dea.ba2072",
+        "type": "inject",
+        "z": "32980006.220a9",
+        "name": "",
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "0",
+        "topic": "",
+        "payload": "0",
+        "payloadType": "num",
+        "x": 110,
+        "y": 440,
+        "wires": [
+            [
+                "ef711ca.9b71be",
+                "eb91bdf0.aa434"
+            ]
+        ]
+    },
+    {
+        "id": "a69f28b6.819258",
+        "type": "inject",
+        "z": "32980006.220a9",
+        "name": "",
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "0",
+        "topic": "",
+        "payload": "255",
+        "payloadType": "num",
+        "x": 110,
+        "y": 600,
+        "wires": [
+            [
+                "c70e813e.89e91",
+                "1d75c343.736b7d"
+            ]
+        ]
+    },
+    {
+        "id": "d5bf52f1.4582e",
+        "type": "inject",
+        "z": "32980006.220a9",
+        "name": "",
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "0",
+        "topic": "",
+        "payload": "255",
+        "payloadType": "num",
+        "x": 110,
+        "y": 760,
+        "wires": [
+            [
+                "4d21650a.6400fc",
+                "dbfdd65a.57a958"
+            ]
+        ]
+    },
+    {
+        "id": "d4468fd.bb11c7",
+        "type": "inject",
+        "z": "32980006.220a9",
+        "name": "",
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "0",
+        "topic": "",
+        "payload": "255",
+        "payloadType": "num",
+        "x": 110,
+        "y": 920,
+        "wires": [
+            [
+                "53f5ebb4.609f14",
+                "47693504.7b1d9c"
+            ]
+        ]
+    },
+    {
+        "id": "cdfc2e26.64916",
+        "type": "ui_group",
+        "name": "Color Sliders",
+        "tab": "be2adfe.9f92d2",
+        "order": 3,
+        "disp": true,
+        "width": "6",
+        "collapse": true
+    },
+    {
+        "id": "826beb48.533878",
+        "type": "ui_group",
+        "name": "Values",
+        "tab": "be2adfe.9f92d2",
+        "order": 2,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "112a075e.b4c559",
+        "type": "ui_group",
+        "name": "Stream",
+        "tab": "be2adfe.9f92d2",
+        "order": 1,
+        "disp": true,
+        "width": "12",
+        "collapse": false
+    },
+    {
+        "id": "be2adfe.9f92d2",
+        "type": "ui_tab",
+        "name": "MJPG-Streamer",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    }
+]
