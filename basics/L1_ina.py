@@ -35,10 +35,12 @@ def readVolts():
     volts = round(battery_voltage, 2)
     return volts
 
-
-if __name__ == "__main__":
+def main():
     read()
     while True:
         myBatt = readVolts()                            # collect a reading
         print("Battery Voltage: %6.2f   V" % myBatt)    # print the reading
-        time.sleep(1)                                   # pause
+        time.sleep(1)  
+
+if __name__ == "__main__":
+    main()
