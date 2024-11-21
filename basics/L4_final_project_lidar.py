@@ -5,7 +5,6 @@ import L3_path_template
 import L2_vector
 import lidar_driving
 
-manual.main()
 #get an array of distances 
 #go to the closest obstance and maintain a distance of 0.4m 
 #logic to find straight lines 
