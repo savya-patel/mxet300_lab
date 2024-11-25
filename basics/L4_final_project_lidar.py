@@ -1,68 +1,73 @@
-#get an array of distances 
-#go to the closest obstance and maintain a distance of 0.4m 
-#logic to find straight lines 
-#untill 0.4 to oj both side sensors HC-SR04
-#third sensor in front to go in line
-
 import numpy as np
-import time
-import L1_lidar as lidar  # Level 1 LIDAR functions for polar scans
-import L2_vector as vec  # Level 2 functions for vector manipulation and conversion
-import L2_speed_control as sc  # Level 2 speed control for motor commands
-import L1_motor as motor  # Low-level motor control
-from threading import Thread  # For running concurrent threads
-import lidar_driving
-import socket
 import json
+from time import sleep
+import socket
+from threading import Thread
+import L1_lidar as lidar
+import L2_vector as vec
+import L2_kinematics as kin
+import L2_inverse_kinematics as ik
+import L2_speed_control as sc
+import L1_log as log
 
 class WallNavigation:
     """
-    This class handles wall-following navigation for SCUTTLE using LIDAR and NodeRED integration.
-    It calculates the robot's global position, aligns it with walls, scans room walls, and outputs
-    real-time data and room area.
+    Wall-following navigation for SCUTTLE using LIDAR and ultrasonic sensors.
+    Calculates the robot's global position using L2_kinematics and controls wheels with L2_inverse_kinematics.
     """
 
     def __init__(self):
-        """
-        Initialization of the WallNavigation system.
-        Sets up the robot's parameters, communication with NodeRED, and starts necessary threads.
-        """
-        # Robot kinematics and geometry
-        self.global_position = np.array([0, 0])  # Robot's global position [x, y]
-        self.previous_position = np.array([0, 0])  # Used for path tracking
-        self.global_angle = 0  # Robot's current orientation in radians
-        self.path = []  # Stores all visited positions for calculating the room area
-        self.start_position = None  # Saves the robot's starting position to detect loop completion
+        # Robot parameters
+        self.global_position = np.array([0, 0])  # Global (x, y) position in meters
+        self.global_angle = 0  # Orientation (theta in radians)
+        self.path = []  # Stores global positions for area calculation
+        self.start_position = None  # Starting point for loop detection
+        self.is_running = True  # Status flag for threads
 
         # Wall-following parameters
-        self.wall_distance = 0.3  # Desired distance from the wall (in meters)
-        self.turn_threshold = 0.5  # Distance threshold to detect corners (in meters)
+        self.wall_distance = 0.4  # Desired distance from the wall (meters)
+        self.turn_threshold = 0.3  # Threshold for corner detection (meters)
 
-        # Status flag to control the threads
-        self.is_running = True
-
-        # NodeRED UDP communication setup, like Lidar_driving
-        self.IP = "127.0.0.1"  # Localhost for UDP communication with NodeRED
+        #UPD communication#
+        self.IP = "127.0.0.1"
         self.port = 3553
         self.dashBoardDatasock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.dashBoardDatasock.bind((self.IP, self.port))
-        self.dashBoardDatasock.settimeout(0.25)  # Timeout for receiving data
-
-        # Initialize the SCUTTLE object
-        self.scuttle = lidar_driving.SCUTTLE()
-
-        # Start threads for LIDAR scanning
-        self.lidar_thread = Thread(target=self.scan_and_update, daemon=True)
-        self.lidar_thread.start()
-
-        #Thread for driving logic
-        self.drive_thread = Thread(target=self.drive_loop, daemon=True)
-        self.drive_thread.start()
-
-        #NodeRED Data Thread (from lidar_driving)
-        self.dashBoardDataThread = Thread(target=self._dashBoardDataLoop, daemon=True)
-        self.dashBoardDataThread.start()
+        self.dashBoardDatasock.settimeout(.25)
         
+        #NodeRED data in#
+        self.dashBoardData = None
+
+        # Start threads
+        self.log_thread = Thread(target=self.lidar_log, daemon=True)
+        self.drive_thread = Thread(target=self.drive_loop, daemon=True)
+        self.scan_thread = Thread(target=self.lidar_scan, daemon=True)
+        
+        self.log_thread.start()
+        self.drive_thread.start()
+        self.scan_thread.start()
+
+    def lidar_scan(self):
+        while True:
+            data = self.cartesian_scan()
+            data_msg = data.encode('utf-8')
+            self.dashBoardDatasock.sendto(data_msg, ("127.0.0.1", 3555))
+            sleep(.025)
+
+    def cartesian_scan(self):
+        rows = ''
+        polar_data = lidar.polarScan(num_points=100)
+
+        for d,t in polar_data:
+            cartesian_point = vec.polar2cart(d,t)
+            rows += self.format_row(cartesian_point)
+
+        return rows[:-1]
+
+    # Format the x,y lidar coordinates so that the bubble-chart can display them
+    def format_row(self, point, r=3):
+        x, y = point
+        return '{x: ' + str(x) + ', y: ' + str(y) + ', r:' + str(r) + '},'
 
     def _dashBoardDataLoop(self):
         while True:
@@ -73,121 +78,106 @@ class WallNavigation:
             except socket.timeout:
                 self.dashBoardData = None
 
-    def scan_and_update(self):
-        """
-        LIDAR thread function: continuously scans the environment and sends the data to NodeRED.
-        Uses SCUTTLE's cartesian_scan method.
-        """
+    def lidar_log(self):
+        """Continuously scans with LIDAR, logs data, and sends to NodeRED."""
         while self.is_running:
-            # Use SCUTTLE's cartesian_scan method to get LIDAR data
-            cartesian_data = self.scuttle.cartesian_scan()
-            print("LIDAR Cartesian Data:", cartesian_data)
+            # Get LIDAR data
+            closest_obstacle = vec.getNearest()
+            cartesian_coords = vec.polar2cart(closest_obstacle[0], closest_obstacle[1])
 
-            # Optionally send to NodeRED
-            message = json.dumps({"lidar": cartesian_data})
-            self.dashBoardDatasock.sendto(message.encode(), ("127.0.0.1", 3555))
-            time.sleep(0.05)  # Avoid flooding
+            # Log LIDAR and cartesian data
+            log.tmpFile(closest_obstacle[0], "distance.txt")
+            log.tmpFile(closest_obstacle[1], "angle.txt")
+            log.tmpFile(cartesian_coords[0], "x_value.txt")
+            log.tmpFile(cartesian_coords[1], "y_value.txt")
+
+            # Log global position
+            log.tmpFile({"x": self.global_position[0], "y": self.global_position[1]}, "global_position.txt")
+
+            sleep(0.1)
 
     def drive_loop(self):
-        """
-        Driving logic thread: aligns the robot with walls, detects corners, and moves forward.
-        """
+        """Controls the robot to follow walls and calculate the area."""
         while self.is_running:
-            # Find the nearest object using LIDAR
-            nearest_object = vec.getNearest()
+            # Get chassis motion from kinematics
+            xdot, thetadot = kin.getMotion()[:2]  # Extract xdot (linear) and thetadot (angular)
 
-            if nearest_object[0] < self.turn_threshold:
-                # If a corner is detected, perform a 90-degree turn
+            # Update global position
+            self.update_global_position(xdot, thetadot)
+
+            # Get closest obstacle using LIDAR
+            closest_obstacle = vec.getNearest()
+
+            # Simulated ultrasonic sensor readings
+            front_distance = 0.35
+            right_front_distance = 0.25
+            right_back_distance = 0.4
+
+            if front_distance < self.turn_threshold:
                 self.turn_corner()
             else:
-                # Otherwise, align with the wall and move forward
-                self.align_with_wall(nearest_object)
-                self.update_global_position()
+                self.align_with_wall(closest_obstacle[0], right_front_distance, right_back_distance)
 
-            # Check if back at the starting position
+            # Check if the robot has returned to the starting position
             if self.start_position is None:
-                # Save the starting position
                 self.start_position = np.copy(self.global_position)
             elif np.linalg.norm(self.global_position - self.start_position) < 0.1:
-                # If close enough to the start position, stop
-                print("Completed room scan!")
-                self.calculate_area()
+                print("Completed loop. Stopping.")
                 self.is_running = False
+                self.calculate_area()
 
-    def align_with_wall(self, nearest_object):
-        """
-        Aligns the robot with the wall by maintaining a constant distance.
-        Uses proportional control to adjust the angle.
-        """
-        angle = nearest_object[1]  # Angle of the nearest object
-        distance_error = self.wall_distance - nearest_object[0]  # Difference from the desired distance
+    def align_with_wall(self, closest_obstacle, right_front, right_back):
+        """Aligns the robot with the wall using ultrasonic sensors."""
+        angle_error = right_front - right_back
+        distance_error = self.wall_distance - closest_obstacle[0]
 
-        # Simple proportional control for alignment
-        if abs(distance_error) > 0.05:
-            theta_dot = -0.2 * distance_error  # Proportional adjustment
-        else:
-            theta_dot = 0
+        # Proportional control
+        forward_speed = 0.2
+        angular_speed = -0.2 * angle_error + -0.2 * distance_error
 
-        # Drive forward with the adjusted angle
-        sc.driveOpenLoop([0.2, theta_dot])
+        # Calculate wheel speeds using inverse kinematics
+        wheel_speeds = ik.getPdTargets(np.array([forward_speed, angular_speed]))
+        sc.driveOpenLoop(wheel_speeds)
 
     def turn_corner(self):
-        """
-        Executes a 90-degree turn when a corner is detected.
-        """
-        target_angle = self.global_angle + np.pi / 2  # Turn 90 degrees
-        while abs(self.global_angle - target_angle) > 0.05:
-            sc.driveOpenLoop([0, 0.5])  # Turn in place
-            self.global_angle += 0.05  # Simulated update of orientation
-            time.sleep(0.1)
+        """Executes a 90-degree turn."""
+        wheel_speeds = ik.getPdTargets(np.array([0, 0.5]))  # Turn in place
+        sc.driveOpenLoop(wheel_speeds)
+        sleep(1.5)  # Adjust timing for a 90-degree turn
+        sc.driveOpenLoop([0, 0])  # Stop motors
 
-    def update_global_position(self):
-        """
-        Updates the robot's global position based on LIDAR readings.
-        """
-        nearest_object = vec.getNearest()
-        cartesian = vec.polar2cart(nearest_object[0], nearest_object[1])
-        self.global_position += cartesian  # Update position
-        self.path.append(np.copy(self.global_position))  # Save for area calculation
+    def update_global_position(self, xdot, thetadot):
+        """Updates the robot's global position using kinematics."""
+        dx = xdot * np.cos(self.global_angle)
+        dy = xdot * np.sin(self.global_angle)
+        self.global_position += np.array([dx, dy])
+        self.global_angle += thetadot
+        self.path.append(np.copy(self.global_position))  # Log the new position
 
     def calculate_area(self):
-        """
-        Calculates the area of the room using the Shoelace formula.
-        Outputs the result to NodeRED.
-        """
+        """Calculates the area of the room using the Shoelace formula."""
         if len(self.path) < 3:
             print("Not enough points to calculate area.")
             return
 
-        # Extract x and y coordinates from the path
         x_coords = [p[0] for p in self.path]
         y_coords = [p[1] for p in self.path]
-
-        # Shoelace formula for polygon area
-        area = 0.5 * abs(
-            sum(x_coords[i] * y_coords[i + 1] - y_coords[i] * x_coords[i + 1]
-                for i in range(len(self.path) - 1))
-        )
-        print(f"Calculated room area: {area:.2f} square meters")
-
-        # Send area result to NodeRED
-        message = json.dumps({"area": area})
-        self.dashBoardDatasock.sendto(message.encode(), ("127.0.0.1", 3555))
+        area = 0.5 * abs(sum(x_coords[i] * y_coords[i + 1] - y_coords[i] * x_coords[i + 1]
+                             for i in range(len(self.path) - 1)))
+        print(f"Calculated room area: {area:.2f} square meters.")
+        log.tmpFile(area, "room_area.txt")
 
     def stop(self):
-        """
-        Stops all operations and shuts down threads safely.
-        """
+        """Stops the robot."""
         self.is_running = False
-        sc.driveOpenLoop([0, 0])  # Stop motors
+        sc.driveOpenLoop([0, 0])
+
 
 if __name__ == "__main__":
+    robot = WallNavigation()
     try:
-        # Initialize and start the navigation system
-        robot = WallNavigation()
         while robot.is_running:
-            time.sleep(1)
+            sleep(1)
     except KeyboardInterrupt:
-        # Stop the robot on interrupt
         robot.stop()
         print("Stopped robot.")
