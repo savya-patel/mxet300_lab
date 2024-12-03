@@ -4,6 +4,7 @@ from time import sleep
 import socket
 from threading import Thread
 import L1_lidar as lidar
+import L1_ina as ina
 import L2_vector as vec
 import L2_kinematics as kin
 import L2_inverse_kinematics as ik
@@ -18,9 +19,9 @@ class WallNavigation:
 
     def __init__(self):
         # Robot parameters
-        self.global_position = np.array([0, 0])  # Global (x, y) position in meters
-        self.global_angle = 0  # Orientation (theta in radians)
-        self.path = []  # Stores global positions for area calculation
+        #self.global_position = np.array([0.0, 0.0], dtype=np.float64)  # Explicitly float64
+        #self.global_angle = 0  # Orientation (theta in radians)
+        #self.path = []  # Stores global positions for area calculation
         self.start_position = None  # Starting point for loop detection
         self.is_running = True  # Status flag for threads
 
@@ -46,6 +47,7 @@ class WallNavigation:
         self.log_thread.start()
         self.drive_thread.start()
         self.scan_thread.start()
+
 
     def lidar_scan(self):
         while True:
@@ -86,13 +88,15 @@ class WallNavigation:
             cartesian_coords = vec.polar2cart(closest_obstacle[0], closest_obstacle[1])
 
             # Log LIDAR and cartesian data
+            voltage = ina.readVolts()
+            log.tmpFile(voltage, "tmp.txt")
             log.tmpFile(closest_obstacle[0], "distance.txt")
             log.tmpFile(closest_obstacle[1], "angle.txt")
             log.tmpFile(cartesian_coords[0], "x_value.txt")
             log.tmpFile(cartesian_coords[1], "y_value.txt")
 
-            # Log global position
-            log.tmpFile({"x": self.global_position[0], "y": self.global_position[1]}, "global_position.txt")
+            #log.tmpFile(self.global_position[0], "global_x.txt")  # Global x-coordinate
+            #log.tmpFile(self.global_position[1], "global_y.txt")  # Global y-coordinate
 
             sleep(0.1)
 
@@ -103,33 +107,41 @@ class WallNavigation:
             xdot, thetadot = kin.getMotion()[:2]  # Extract xdot (linear) and thetadot (angular)
 
             # Update global position
-            self.update_global_position(xdot, thetadot)
+            #self.update_global_position(xdot, thetadot)
 
             # Get closest obstacle using LIDAR
             closest_obstacle = vec.getNearest()
+            closest_obstacle = closest_obstacle.tolist()  # Convert to Python list
+            distance=closest_obstacle[0]
 
             # Simulated ultrasonic sensor readings
             front_distance = 0.35
             right_front_distance = 0.25
             right_back_distance = 0.4
 
+            log.tmpFile(front_distance, "front.txt")
+            log.tmpFile(right_front_distance, "right_f.txt")
+            log.tmpFile(right_back_distance, "right_b.txt")
+
             if front_distance < self.turn_threshold:
                 self.turn_corner()
             else:
                 self.align_with_wall(closest_obstacle[0], right_front_distance, right_back_distance)
 
-            # Check if the robot has returned to the starting position
+            # Check if the robot has returned to the starting position commented out to let code continously for now
+            '''
             if self.start_position is None:
                 self.start_position = np.copy(self.global_position)
             elif np.linalg.norm(self.global_position - self.start_position) < 0.1:
                 print("Completed loop. Stopping.")
                 self.is_running = False
                 self.calculate_area()
+            '''
 
-    def align_with_wall(self, closest_obstacle, right_front, right_back):
+    def align_with_wall(self, distance, right_front, right_back):
         """Aligns the robot with the wall using ultrasonic sensors."""
         angle_error = right_front - right_back
-        distance_error = self.wall_distance - closest_obstacle[0]
+        distance_error = self.wall_distance - distance
 
         # Proportional control
         forward_speed = 0.2
@@ -164,7 +176,7 @@ class WallNavigation:
         y_coords = [p[1] for p in self.path]
         area = 0.5 * abs(sum(x_coords[i] * y_coords[i + 1] - y_coords[i] * x_coords[i + 1]
                              for i in range(len(self.path) - 1)))
-        print(f"Calculated room area: {area:.2f} square meters.")
+        print("Calculated room area: {:.2f} square meters.".format(area))
         log.tmpFile(area, "room_area.txt")
 
     def stop(self):
