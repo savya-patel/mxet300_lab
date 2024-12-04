@@ -21,14 +21,14 @@ forward_velocity = 0.4      # forward velocity (x dot) in m/s of SCUTTLE. NOTE t
 # enter the chassis forward velocity (x dot) in m/s, chassis angular velocity (theta dot) in rad/s, and motion duration in sec for each motion to create the path
 motions = [
     [0.4, 0.0, 2],            # Motion 1
-    [0.0, 1.57, 1.35],            # Motion 2
-    [0.4, 0.0, 2],            # Motion 1
-    [0.0, 1.57, 1.35],
-    [0.4, 0.0, 2],            # Motion 1
-    [0.0, -1.57, 1.35],
-    [0.4, 0.0, 2],            # Motion 1
-    [0.0, -1.57, 1.35],
+    [0.0, 1.57, 1.35],        # Turn 1
+    [0.4, 0.0, 2],            # Motion 2
+    [0.0, 1.57, 1.35],        # Turn 2
     [0.4, 0.0, 2],            # Motion 3
+    [0.0, -1.57, 1.35],       # Turn 3
+    [0.4, 0.0, 2],            # Motion 4
+    [0.0, -1.57, 1.35],       # Turn 4
+    [0.4, 0.0, 2],            # Motion 5
 ]
 
 # iterate through and perform each open loop motion and then wait the specified duration.
